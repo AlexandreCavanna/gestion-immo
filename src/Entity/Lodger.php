@@ -31,6 +31,10 @@ class Lodger
     #[ORM\Column(type: 'datetime', nullable: true)]
     private \DateTime $EndDate;
 
+    #[ORM\ManyToOne(targetEntity: Housing::class, inversedBy: 'lodgers')]
+    #[ORM\JoinColumn(nullable: false)]
+    private Housing $housing;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -104,6 +108,18 @@ class Lodger
     public function setEndDate(?\DateTimeInterface $EndDate): self
     {
         $this->EndDate = $EndDate;
+
+        return $this;
+    }
+
+    public function getHousing(): ?Housing
+    {
+        return $this->housing;
+    }
+
+    public function setHousing(?Housing $housing): self
+    {
+        $this->housing = $housing;
 
         return $this;
     }

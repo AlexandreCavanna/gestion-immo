@@ -3,7 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\HousingRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 #[ORM\Entity(repositoryClass: HousingRepository::class)]
 class Housing
@@ -22,6 +25,14 @@ class Housing
     #[ORM\ManyToOne(targetEntity: Building::class, inversedBy: 'housings')]
     #[ORM\JoinColumn(nullable: false)]
     private Building $building;
+
+    #[ORM\OneToMany(mappedBy: 'housing', targetEntity: Lodger::class)]
+    private Collection $lodgers;
+
+    #[Pure] public function __construct()
+    {
+        $this->lodgers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -60,6 +71,36 @@ class Housing
     public function setBuilding(?Building $building): self
     {
         $this->building = $building;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Lodger[]
+     */
+    public function getLodgers(): Collection
+    {
+        return $this->lodgers;
+    }
+
+    public function addLodger(Lodger $lodger): self
+    {
+        if (!$this->lodgers->contains($lodger)) {
+            $this->lodgers[] = $lodger;
+            $lodger->setHousing($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLodger(Lodger $lodger): self
+    {
+        if ($this->lodgers->removeElement($lodger)) {
+            // set the owning side to null (unless already changed)
+            if ($lodger->getHousing() === $this) {
+                $lodger->setHousing(null);
+            }
+        }
 
         return $this;
     }
