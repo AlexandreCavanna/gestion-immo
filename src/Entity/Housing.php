@@ -11,13 +11,17 @@ class Housing
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $lot;
+    private string $lot;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $type;
+    private string $type;
+
+    #[ORM\ManyToOne(targetEntity: Building::class, inversedBy: 'housings')]
+    #[ORM\JoinColumn(nullable: false)]
+    private Building $building;
 
     public function getId(): ?int
     {
@@ -44,6 +48,18 @@ class Housing
     public function setType(string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getBuilding(): ?Building
+    {
+        return $this->building;
+    }
+
+    public function setBuilding(?Building $building): self
+    {
+        $this->building = $building;
 
         return $this;
     }

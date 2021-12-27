@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\BuildingRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BuildingRepository::class)]
@@ -11,13 +13,21 @@ class Building
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $address;
+    private string $address;
 
     #[ORM\Column(type: 'string', length: 4)]
-    private $years;
+    private string $years;
+
+    #[ORM\OneToMany(mappedBy: 'building', targetEntity: Housing::class, orphanRemoval: true)]
+    private Collection $housings;
+
+    public function __construct()
+    {
+        $this->housings = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -44,6 +54,36 @@ class Building
     public function setYears(string $years): self
     {
         $this->years = $years;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Housing[]
+     */
+    public function getHousings(): Collection
+    {
+        return $this->housings;
+    }
+
+    public function addHousing(Housing $housing): self
+    {
+        if (!$this->housings->contains($housing)) {
+            $this->housings[] = $housing;
+            $housing->setBuilding($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHousing(Housing $housing): self
+    {
+        if ($this->housings->removeElement($housing)) {
+            // set the owning side to null (unless already changed)
+            if ($housing->getBuilding() === $this) {
+                $housing->setBuilding(null);
+            }
+        }
 
         return $this;
     }
