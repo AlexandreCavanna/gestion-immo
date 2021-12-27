@@ -11,25 +11,25 @@ class Lodger
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 50)]
-    private $firstname;
+    private string $firstname;
 
     #[ORM\Column(type: 'string', length: 50)]
-    private $lastname;
+    private string $lastname;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $phone;
+    private string $phone;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $email;
+    private string $email;
 
     #[ORM\Column(type: 'datetime')]
-    private $startDate;
+    private \DateTime $startDate;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private $EndDate;
+    private \DateTime $EndDate;
 
     public function getId(): ?int
     {

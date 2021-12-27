@@ -11,16 +11,16 @@ class Charge
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'float', nullable: true)]
-    private $boilerCharge;
+    private float $boilerCharge;
 
     #[ORM\Column(type: 'float')]
-    private $electricityCharge;
+    private float $electricityCharge;
 
     #[ORM\Column(type: 'float', nullable: true)]
-    private $maintenanceCharge;
+    private float $maintenanceCharge;
 
     public function getId(): ?int
     {

@@ -6,6 +6,7 @@ use App\Repository\BuildingRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 #[ORM\Entity(repositoryClass: BuildingRepository::class)]
 class Building
@@ -24,7 +25,7 @@ class Building
     #[ORM\OneToMany(mappedBy: 'building', targetEntity: Housing::class, orphanRemoval: true)]
     private Collection $housings;
 
-    public function __construct()
+    #[Pure] public function __construct()
     {
         $this->housings = new ArrayCollection();
     }
