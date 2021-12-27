@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lodger index{% endblock %}
+
+{% block body %}
+    <h1>Lodger index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>StartDate</th>
+                <th>EndDate</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for lodger in lodgers %}
+            <tr>
+                <td>{{ lodger.id }}</td>
+                <td>{{ lodger.firstname }}</td>
+                <td>{{ lodger.lastname }}</td>
+                <td>{{ lodger.phone }}</td>
+                <td>{{ lodger.email }}</td>
+                <td>{{ lodger.startDate ? lodger.startDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ lodger.EndDate ? lodger.EndDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('lodger_show', {'id': lodger.id}) }}">show</a>
+                    <a href="{{ path('lodger_edit', {'id': lodger.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('lodger_new') }}">Create new</a>
+{% endblock %}
