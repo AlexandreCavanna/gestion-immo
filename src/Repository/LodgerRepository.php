@@ -11,6 +11,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Lodger|null findOneBy(array $criteria, array $orderBy = null)
  * @method Lodger[]    findAll()
  * @method Lodger[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
+ * @extends  ServiceEntityRepository<Lodger>
  */
 class LodgerRepository extends ServiceEntityRepository
 {

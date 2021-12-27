@@ -22,10 +22,14 @@ class Building
     #[ORM\Column(type: 'string', length: 4)]
     private string $years;
 
+    /**
+     * @var Collection<string, Housing>
+     */
     #[ORM\OneToMany(mappedBy: 'building', targetEntity: Housing::class, orphanRemoval: true)]
     private Collection $housings;
 
-    #[Pure] public function __construct()
+    #[Pure]
+    public function __construct()
     {
         $this->housings = new ArrayCollection();
     }
@@ -35,7 +39,7 @@ class Building
         return $this->id;
     }
 
-    public function getAddress(): ?string
+    public function getAddress(): string
     {
         return $this->address;
     }
@@ -60,7 +64,7 @@ class Building
     }
 
     /**
-     * @return Collection|Housing[]
+     * @return Collection<string, Housing>
      */
     public function getHousings(): Collection
     {

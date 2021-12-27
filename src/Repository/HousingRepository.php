@@ -11,6 +11,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Housing|null findOneBy(array $criteria, array $orderBy = null)
  * @method Housing[]    findAll()
  * @method Housing[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
+ * @extends  ServiceEntityRepository<Housing>
  */
 class HousingRepository extends ServiceEntityRepository
 {

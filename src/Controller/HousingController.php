@@ -71,9 +71,12 @@ class HousingController extends AbstractController
     #[Route('/{id}', name: 'housing_delete', methods: ['POST'])]
     public function delete(Request $request, Housing $housing, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$housing->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($housing);
-            $entityManager->flush();
+        $token = $request->request->get('_token');
+        if (is_string($token) || null === $token) {
+            if ($this->isCsrfTokenValid('delete'.$housing->getId(), $token)) {
+                $entityManager->remove($housing);
+                $entityManager->flush();
+            }
         }
 
         return $this->redirectToRoute('housing_index', [], Response::HTTP_SEE_OTHER);

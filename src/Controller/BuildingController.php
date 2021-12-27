@@ -71,9 +71,12 @@ class BuildingController extends AbstractController
     #[Route('/{id}', name: 'building_delete', methods: ['POST'])]
     public function delete(Request $request, Building $building, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$building->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($building);
-            $entityManager->flush();
+        $token = $request->request->get('_token');
+        if (is_string($token) || null === $token) {
+            if ($this->isCsrfTokenValid('delete'.$building->getId(), $token)) {
+                $entityManager->remove($building);
+                $entityManager->flush();
+            }
         }
 
         return $this->redirectToRoute('building_index', [], Response::HTTP_SEE_OTHER);

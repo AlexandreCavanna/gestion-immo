@@ -23,17 +23,17 @@ class Lodger
     private string $phone;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private string $email;
+    private ?string $email;
 
     #[ORM\Column(type: 'datetime')]
-    private \DateTime $startDate;
+    private \DateTimeInterface $startDate;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private \DateTime $EndDate;
+    private ?\DateTimeInterface $EndDate;
 
     #[ORM\ManyToOne(targetEntity: Housing::class, inversedBy: 'lodgers')]
-    #[ORM\JoinColumn(nullable: false)]
-    private Housing $housing;
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Housing $housing;
 
     public function getId(): ?int
     {

@@ -23,13 +23,17 @@ class Housing
     private string $type;
 
     #[ORM\ManyToOne(targetEntity: Building::class, inversedBy: 'housings')]
-    #[ORM\JoinColumn(nullable: false)]
-    private Building $building;
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Building $building;
 
+    /**
+     * @var Collection<int|string, Lodger>
+     */
     #[ORM\OneToMany(mappedBy: 'housing', targetEntity: Lodger::class)]
     private Collection $lodgers;
 
-    #[Pure] public function __construct()
+    #[Pure]
+    public function __construct()
     {
         $this->lodgers = new ArrayCollection();
     }
@@ -76,7 +80,7 @@ class Housing
     }
 
     /**
-     * @return Collection|Lodger[]
+     * @return Collection<int|string, Lodger>
      */
     public function getLodgers(): Collection
     {

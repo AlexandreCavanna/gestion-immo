@@ -71,9 +71,12 @@ class LodgerController extends AbstractController
     #[Route('/{id}', name: 'lodger_delete', methods: ['POST'])]
     public function delete(Request $request, Lodger $lodger, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$lodger->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($lodger);
-            $entityManager->flush();
+        $token = $request->request->get('_token');
+        if (is_string($token) || null === $token) {
+            if ($this->isCsrfTokenValid('delete'.$lodger->getId(), $token)) {
+                $entityManager->remove($lodger);
+                $entityManager->flush();
+            }
         }
 
         return $this->redirectToRoute('lodger_index', [], Response::HTTP_SEE_OTHER);
