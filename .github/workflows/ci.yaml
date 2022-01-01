@@ -1,0 +1,53 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    name: Symfony 6.0 (PHP ${{ matrix.php-versions }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+      matrix:
+        php-versions: [ '8.1' ]
+
+    steps:
+      - name: Set up MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -e 'CREATE DATABASE gestion_immo;' -uroot -proot
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP, extensions and composer with shivammathur/setup-php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, iconv, json, mbstring, pdo
+        env:
+          update: true
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+
+      - name: Composer Install
+        uses: php-actions/composer@v6
+        with:
+          php_version: 8.1
+          version: 2
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Phpstan
+        run: |
+          sudo chmod -R 777 var/*
+          php bin/console cache:clear --env=dev
+          php bin/console cache:warmup --env=dev
+          ./vendor/bin/phpstan analyse -v --memory-limit=1G --ansi
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
