@@ -43,7 +43,10 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-      - name: Phpstan
+      - name: Php-cs-fixer
+        run: ./vendor/bin/php-cs-fixer fix -v --dry-run --stop-on-violation --using-cache=no
+
+      - name: Phptan
         run: |
           sudo chmod -R 777 var/*
           php bin/console cache:clear --env=dev
